@@ -59,13 +59,6 @@ The code is a direct translation of Oleg Kiselyov's Haskell solution:
 (defn good-summands [s]
   (nth good-summands-table s))
 
-(defn all
-  "true iff all elements in xs satisfies the predicate p?"
-  [p? xs]
-  (or (empty? xs)
-      (and (p? (first xs))
-	   (all p? (next xs)))))
-
 (defn singleton?
   "true iff xs contains a single element"
   [xs]
@@ -87,7 +80,7 @@ The code is a direct translation of Oleg Kiselyov's Haskell solution:
   "Mr.S knows Mr.P does not know. All the good summands must not
    have unique factorizations"
   [[a b]]
-  (all fact1? (good-summands (+ a b))))
+  (every? fact1? (good-summands (+ a b))))
 
 (defn fact4?
   "Mr.P *now* knows fact3 is true, and can find the numbers. Thus
@@ -106,6 +99,6 @@ The code is a direct translation of Oleg Kiselyov's Haskell solution:
 (def result (for [a good-nums
 		  b good-nums
 		  :when (and (>= a b)
-			     (all #(% [a b])
-				  [fact1? fact2? fact3? fact4? fact5?]))]
+			     (every? #(% [a b])
+				     [fact1? fact2? fact3? fact4? fact5?]))]
 	      [a b]))
