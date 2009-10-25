@@ -17,8 +17,7 @@
   [re text]
   (let [rlen (.length re)
 	tlen (.length text)]
-    (letfn [(match-here
-	     "match-here searches for re[ri:] starting at text[ti:]"
+    (letfn [(match-here ;;match-here searches for re[ri:] starting at text[ti:]
 	     [ri ti]
 	     (cond (= ri rlen) true
 		   (= (get re (inc ri)) \*)
@@ -31,8 +30,7 @@
 			    (= (get re ri) (get text ti))))
 		     (recur (inc ri) (inc ti))
 		   :else false))
-	    (match-*
-	     "match-* searches for c*re[ri:] starting at text[ti:]"
+	    (match-* ;; match-* searches for c*re[ri:] starting at text[ti:]
 	     [c ri ti]
 	     (loop [ti ti]
 	       (cond (match-here ri ti) true
@@ -41,11 +39,10 @@
 			      (= c \.)))
 		     (recur (inc ti))
 		     :else false))) ]
-    (if (= (get re 0) \^)
-      (match-here 1 0)
-      (or (match-here 0 0)
-	  (loop [ti 1]
-	    (cond (= ti tlen) false
-		  (match-here 0 ti) true
-		  :else (recur (inc ti)))))))))
+      (if (= (get re 0) \^)
+	(match-here 1 0)
+	(loop [ti 0]
+	  (cond (match-here 0 ti) true
+		(= ti tlen) false
+		:else (recur (inc ti))))))))
 
